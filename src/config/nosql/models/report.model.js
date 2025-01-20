@@ -17,6 +17,11 @@ const ReportModel = Schema(
       enum: ['VICTIM', 'PROXY'],
       required: true,
     },
+    status: {
+      type: String,
+      enum: ['PENDING', 'APPROVED'],
+      default: 'PENDING',
+    },
   },
   {
     timestamps: true,

@@ -44,7 +44,64 @@ const sendScamReport = async (data) => {
     }
   }
 }
-
+const checkScam = async (data) => {
+  try {
+    if (data.scammerFaceBookLink) {
+      const reports = await Report.find({
+        scammerFaceBookLink: data.scammerFaceBookLink,
+        status: 'APPROVED',
+      })
+      return {
+        status: 200,
+        message: 'Get scam reports successfully!',
+        data: reports,
+      }
+    } else {
+      if (data.scammerBankName && data.scamBankAccountNumber) {
+        const reports = await Report.find({
+          scammerBankName: data.scammerBankName,
+          scamBankAccountNumber: data.scamBankAccountNumber,
+          status: 'APPROVED',
+        })
+        return {
+          status: 200,
+          message: 'Get scam reports successfully!',
+          data: reports,
+        }
+      }
+    }
+  } catch (error) {
+    return {
+      status: 500,
+      message: error.message,
+    }
+  }
+}
+const approveScamReport = async (id) => {
+  try {
+    const scamReport = await Report.findOne({
+      _id: id,
+    })
+    if (!scamReport) {
+      return {
+        status: 404,
+        message: 'Not found scam report: check id!',
+      }
+    }
+    return {
+      status: 200,
+      message: 'Approved scam reports successfully!',
+      data: scamReport,
+    }
+  } catch (error) {
+    return {
+      status: 500,
+      message: error.message,
+    }
+  }
+}
 module.exports = {
   sendScamReport,
+  checkScam,
+  approveScamReport,
 }
